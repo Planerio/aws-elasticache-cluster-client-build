@@ -1,0 +1,8 @@
+[submodule "aws-elasticache-cluster-client-libmemcached"]
+	path = aws-elasticache-cluster-client-libmemcached
+	url = git@github.com:awslabs/aws-elasticache-cluster-client-libmemcached.git
+	branch = master
+[submodule "aws-elasticache-cluster-client-memcached-for-php"]
+	path = aws-elasticache-cluster-client-memcached-for-php
+	url = git@github.com:Planerio/aws-elasticache-cluster-client-memcached-for-php.git
+	branch = memcached-3.1.5
