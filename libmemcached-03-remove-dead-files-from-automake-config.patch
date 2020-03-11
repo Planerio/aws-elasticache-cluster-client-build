@@ -1,0 +1,36 @@
+From e9aca426d67f3cea4386fdbcae2789c2a6a52d60 Mon Sep 17 00:00:00 2001
+From: Ingmar Runge <i.runge@planerio.de>
+Date: Wed, 11 Mar 2020 14:05:33 +0100
+Subject: [PATCH] Remove dead files from automake config
+
+---
+ libmemcached-1.0/struct/include.am | 1 -
+ libmemcached/include.am            | 1 -
+ 2 files changed, 2 deletions(-)
+
+diff --git a/libmemcached-1.0/struct/include.am b/libmemcached-1.0/struct/include.am
+index b84f984..9e15c5b 100644
+--- a/libmemcached-1.0/struct/include.am
++++ b/libmemcached-1.0/struct/include.am
+@@ -9,6 +9,5 @@ nobase_include_HEADERS+= libmemcached-1.0/struct/memcached.h
+ nobase_include_HEADERS+= libmemcached-1.0/struct/result.h 
+ nobase_include_HEADERS+= libmemcached-1.0/struct/sasl.h 
+ nobase_include_HEADERS+= libmemcached-1.0/struct/server.h
+-nobase_include_HEADERS+= libmemcached-1.0/struct/configuration_server.h
+ nobase_include_HEADERS+= libmemcached-1.0/struct/stat.h 
+ nobase_include_HEADERS+= libmemcached-1.0/struct/string.h
+diff --git a/libmemcached/include.am b/libmemcached/include.am
+index 2172a3f..1eccc36 100644
+--- a/libmemcached/include.am
++++ b/libmemcached/include.am
+@@ -25,7 +25,6 @@ noinst_HEADERS+= libmemcached/do.hpp
+ noinst_HEADERS+= libmemcached/encoding_key.h 
+ noinst_HEADERS+= libmemcached/error.hpp 
+ noinst_HEADERS+= libmemcached/flag.hpp 
+-noinst_HEADERS+= libmemcached/host.h
+ noinst_HEADERS+= libmemcached/initialize_query.h 
+ noinst_HEADERS+= libmemcached/instance.hpp
+ noinst_HEADERS+= libmemcached/internal.h 
+-- 
+2.20.1
+

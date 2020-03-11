@@ -1,0 +1,48 @@
+From a23bb4fe30131266b42bf4bcc10d1f96c77b5e12 Mon Sep 17 00:00:00 2001
+From: Ingmar Runge <i.runge@planerio.de>
+Date: Wed, 11 Mar 2020 13:17:34 +0100
+Subject: [PATCH] Disable tests in build
+
+---
+ Makefile.am | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index fe137da..8f7b63f 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,4 +1,4 @@
+-ACLOCAL_AMFLAGS= -I m4 -I libtest/m4
++ACLOCAL_AMFLAGS= -I m4
+ AM_YFLAGS= -d
+ 
+ # includes append to these:
+@@ -43,8 +43,6 @@ include libmemcached/include.am
+ include libmemcached-1.0/include.am
+ else
+ 
+-include libtest/include.am
+-
+ include libhashkit-1.0/include.am
+ include libmemcached-1.0/include.am
+ 
+@@ -74,7 +72,6 @@ include libmemcachedinternal/include.am
+ include libmemcachedinternal/util/include.am
+ include rpm/include.mk
+ include support/include.am
+-include tests/include.am
+ include util/include.am
+ include win32/include.am
+ 
+@@ -101,7 +98,7 @@ merge-clean:
+ 	@echo "Files that need to be either removed or checked in:"
+ 	@bzr unknowns
+ 
+-clean-local: clean-libtest-check clean-docs-check clean-rpm
++clean-local: clean-docs-check clean-rpm
+ 
+ 
+ lcov: lcov-clean check
+-- 
+2.20.1
+

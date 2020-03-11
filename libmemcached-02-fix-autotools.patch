@@ -1,0 +1,31 @@
+From 6a978335acb1b1dab9ee4702928f2c0e9c3fa24d Mon Sep 17 00:00:00 2001
+From: Ingmar Runge <i.runge@planerio.de>
+Date: Wed, 11 Mar 2020 13:35:58 +0100
+Subject: [PATCH] Move AC_CONFIG_AUX_DIR up a few lines so the autotools can
+ find it
+
+---
+ configure.ac | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 17b7351..a48e742 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -13,11 +13,12 @@ m4_include([version.m4])
+ AC_PREREQ([2.61])
+ AC_INIT([libmemcached],VERSION_NUMBER,[http://libmemcached.org/])
+ 
++AC_CONFIG_AUX_DIR([build-aux])
++
+ # Setup the compilers early on
+ AC_PROG_CC([cc gcc clang])
+ AC_PROG_CXX([c++ g++ clang++])
+ 
+-AC_CONFIG_AUX_DIR([build-aux])
+ AC_CONFIG_MACRO_DIR([m4])
+ 
+ AC_CANONICAL_HOST
+-- 
+2.20.1
+
