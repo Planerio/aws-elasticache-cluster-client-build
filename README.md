@@ -34,4 +34,5 @@
         bash -c 'cd `find /usr/lib/php/ -name memcached.so -printf '%h'` && \
             tar cvf /dist/AmazonElastiCacheClusterClient-PHP-64bit.tar.gz memcached.so'
     ```
+    (This convoluted snippet stores the built extension in a .tar.gz file into the "dist" folder.)
 6. Clean up Docker images 😉
