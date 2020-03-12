@@ -6,6 +6,10 @@ SHELL ["/bin/bash", "-c"]
 ARG PHP_VERSION=7.4
 # set to 1 to enable:
 ARG ENABLE_IGBINARY=0
+# set to 1 to enable:
+ARG ENABLE_MSGPACK=0
+# set to 1 to enable:
+ARG ENABLE_JSON=0
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
     && apt-get update \
@@ -40,7 +44,13 @@ RUN cd /build/aws-elasticache-cluster-client-libmemcached \
 
 RUN cd /build/aws-elasticache-cluster-client-memcached-for-php \
     && phpize \
-    && ./configure --with-pic --disable-memcached-sasl --enable-memcached-session `if [ $ENABLE_IGBINARY -eq 1 ]; then echo "--enable-memcached-igbinary"; fi` \
+    && ./configure \
+        --with-pic \
+        --disable-memcached-sasl \
+        --enable-memcached-session \
+        `if [ $ENABLE_JSON -eq 1 ]; then echo "--enable-memcached-json"; fi` \
+        `if [ $ENABLE_MSGPACK -eq 1 ]; then echo "--enable-memcached-msgpack"; fi` \
+        `if [ $ENABLE_IGBINARY -eq 1 ]; then echo "--enable-memcached-igbinary"; fi` \
     && sed -i "s#-lmemcachedutil#-Wl,-whole-archive /usr/local/lib/libmemcachedutil.a -Wl,-no-whole-archive#" Makefile \
     && sed -i "s#-lmemcached#-Wl,-whole-archive /usr/local/lib/libmemcached.a -Wl,-no-whole-archive#" Makefile \
     && make -j`nproc` \
