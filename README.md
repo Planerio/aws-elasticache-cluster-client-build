@@ -10,9 +10,9 @@
 
 - only Linux 64bit
 - PHP 7.1 through to PHP 7.4 - thanks to the sury.org PHP repository!
-- with or without igbinary
-- with or without msgpack
-- with or without JSON
+- with or without igbinary (`--build-arg ENABLE_IGBINARY=1`)
+- with or without msgpack (`--build-arg ENABLE_MSGPACK=1`)
+- with or without JSON (`--build-arg ENABLE_JSON=1`)
 - only without SASL
 
 ### How-to
@@ -31,7 +31,7 @@
     ```
     docker run -ti --rm \
         -v "$(pwd)/dist":/dist `cat /tmp/elasticache.docker` \
-        bash -c 'cd `find /usr/lib/php/ -name memcached.so -printf '%h'` && \
+        bash -c 'cd `find /usr/lib/php/ -name memcached.so -printf "%h"` && \
             tar czvf /dist/AmazonElastiCacheClusterClient-PHP-64bit.tar.gz memcached.so'
     ```
     (This convoluted snippet stores the built extension in a .tar.gz file into the "dist" folder.)
