@@ -23,8 +23,9 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
     && apt-get update \
     && apt-get install -y \
         autoconf pkg-config \
-        php$PHP_VERSION-cli php-igbinary php-msgpack php-dev libevent-dev zlib1g-dev \
-    && if [ $ENABLE_IGBINARY -eq 1 ]; then apt-get install php-igbinary; fi \
+        php$PHP_VERSION-cli php-dev libevent-dev zlib1g-dev \
+    && if [ $ENABLE_IGBINARY -eq 1 ]; then apt-get install -y php-igbinary; fi \
+    && if [ $ENABLE_MSGPACK -eq 1 ]; then apt-get install -y php-msgpack; fi \
     && apt-get clean
 
 RUN mkdir /build
