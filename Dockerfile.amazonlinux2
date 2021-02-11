@@ -1,4 +1,4 @@
-FROM debian:10-slim
+FROM amazonlinux:2
 
 SHELL ["/bin/bash", "-c"]
 
@@ -11,22 +11,20 @@ ARG ENABLE_MSGPACK=0
 # set to 1 to enable:
 ARG ENABLE_JSON=0
 
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
-    && apt-get update \
-    && apt-get upgrade -y \
-    && apt-get install -y lsb-release apt-transport-https ca-certificates wget curl locales \
-    && \
-    if [ "$PHP_VERSION" != "7.3" ]; then \
-        wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
-        echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list \
-    ; fi \
-    && apt-get update \
-    && apt-get install --no-install-recommends -y \
-        build-essential autoconf pkg-config patch \
-        php$PHP_VERSION-cli php$PHP_VERSION-dev libevent-dev zlib1g-dev \
-    && if [ $ENABLE_IGBINARY -eq 1 ]; then apt-get install -y php-igbinary; fi \
-    && if [ $ENABLE_MSGPACK -eq 1 ]; then apt-get install -y php-msgpack; fi \
-    && apt-get clean
+RUN yum -y update \
+    && yum -y install yum-utils \
+    && yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+    && yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm \
+    && yum-config-manager --enable remi-php`echo "$PHP_VERSION" | tr -d '.'`
+
+RUN yum -y install php`echo "$PHP_VERSION" | tr -d '.'` php`echo "$PHP_VERSION" | tr -d '.'`-php-devel \
+    && if [ $ENABLE_IGBINARY -eq 1 ]; then yum -y install php`echo "$PHP_VERSION" | tr -d '.'`-php-igbinary-devel; fi \
+    && if [ $ENABLE_MSGPACK -eq 1 ]; then yum -y install php`echo "$PHP_VERSION" | tr -d '.'`-php-pecl-msgpack-devel; fi
+
+RUN yum -y install patch make gcc gcc-c++ autoconf automake libtool
+
+RUN echo "source scl_source enable php"`echo $PHP_VERSION | tr -d '.'` >> /root/.bash_profile
+ENV BASH_ENV=/root/.bash_profile
 
 RUN mkdir /build
 
@@ -61,10 +59,13 @@ RUN cd /build/aws-elasticache-cluster-client-memcached-for-php \
 RUN rm -rf /build
 
 # check that the PHP extension is statically linked to libmemcached:
-RUN if ldd `find /usr/lib/php/ -name memcached.so` | grep memcached; then exit 1; fi
+RUN if ldd `find /opt/remi/ -name memcached.so` | grep memcached; then exit 1; fi
 
 # check that the PHP extension can be loaded:
 RUN php -v \
     && php -dextension=memcached.so -m | grep 'memcached' \
     && php -dextension=memcached.so -r 'new Memcached();' \
     && php -dextension=memcached.so -r 'if (!defined("Memcached::DYNAMIC_CLIENT_MODE")) exit(1);'
+
+RUN mkdir -p /build/final \
+    && cp -p `find /opt/remi/ -name memcached.so` /build/final/
