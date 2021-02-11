@@ -21,9 +21,9 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
         echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list \
     ; fi \
     && apt-get update \
-    && apt-get install -y \
-        autoconf pkg-config \
-        php$PHP_VERSION-cli php-dev libevent-dev zlib1g-dev \
+    && apt-get install --no-install-recommends -y \
+        build-essential autoconf pkg-config patch \
+        php$PHP_VERSION-cli php$PHP_VERSION-dev libevent-dev zlib1g-dev \
     && if [ $ENABLE_IGBINARY -eq 1 ]; then apt-get install -y php-igbinary; fi \
     && if [ $ENABLE_MSGPACK -eq 1 ]; then apt-get install -y php-msgpack; fi \
     && apt-get clean
@@ -64,6 +64,7 @@ RUN rm -rf /build
 RUN if ldd `find /usr/lib/php/ -name memcached.so` | grep memcached; then exit 1; fi
 
 # check that the PHP extension can be loaded:
-RUN php -dextension=memcached.so -m | grep 'memcached' \
+RUN php -v \
+    && php -dextension=memcached.so -m | grep 'memcached' \
     && php -dextension=memcached.so -r 'new Memcached();' \
     && php -dextension=memcached.so -r 'if (!defined("Memcached::DYNAMIC_CLIENT_MODE")) exit(1);'
